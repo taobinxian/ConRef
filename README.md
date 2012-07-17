@@ -1,4 +1,4 @@
 ConRef
 ======
 
-this is the plugin repository
+this is the first version of the plugin 
