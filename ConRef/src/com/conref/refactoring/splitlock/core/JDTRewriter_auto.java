@@ -54,7 +54,7 @@ import com.conref.util.WorkbenchHelper;
 
 import soot.SootField;
 
-public class JDTRewriter {
+public class JDTRewriter_auto {
 	private final class syncStmtVisitor extends ASTVisitor {
 		@SuppressWarnings("unchecked")
 		public boolean visit(SynchronizedStatement synstmt) {
@@ -151,7 +151,7 @@ public class JDTRewriter {
 	private ASTRewrite rewriter;
 	private boolean flag = false;
 
-	public JDTRewriter(IFile file) {
+	public JDTRewriter_auto(IFile file) {
 		this._file = file;
 	}
 

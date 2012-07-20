@@ -34,8 +34,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import com.conref.refactoring.Activator;
-import com.conref.refactoring.splitlock.actions.ShowTableViewAction;
-import com.conref.refactoring.splitlock.core.JDTRewriter;
+import com.conref.refactoring.splitlock.actions.splitlock;
+import com.conref.refactoring.splitlock.core.JDTRewriter_auto;
 import com.conref.refactoring.splitlock.refactor.splitRefactoring;
 import com.conref.refactoring.splitlock.refactoringWizard.splitRefactoringWizard;
 import com.conref.util.WorkbenchHelper;
@@ -72,7 +72,7 @@ public class MethodsView extends ViewPart {
 	private Action showCandidateSync;
 	private Action doubleClickAction;
 
-	private JDTRewriter jdtRewriter;
+	private JDTRewriter_auto jdtRewriter;
 
 	private String id= "test.views.SampleView";
 	
@@ -160,7 +160,7 @@ public class MethodsView extends ViewPart {
 				   String methodname=obj.toString();
 			     String clsName=cls.getText();
 				 IFile file = WorkbenchHelper.getselectedFile(clsName);
-				 jdtRewriter=new JDTRewriter(file);
+				 jdtRewriter=new JDTRewriter_auto(file);
 				try {
 					Change change=jdtRewriter.run(methodname,clsName);
 					IWorkbench workbench = PlatformUI.getWorkbench();
@@ -176,7 +176,7 @@ public class MethodsView extends ViewPart {
 //						MethodsView viewpart = (MethodsView) page.findView(id);
 //						Map classMap = ShowTableViewAction.getClasses(file);
 //						viewpart.getViewer().setInput(classMap);
-						ShowTableViewAction.updateView();
+						splitlock.updateView();
 						//	page.showView(id);
 						jdtRewriter.addAnnotation(methodname);
 					} catch (InterruptedException e) {
@@ -208,7 +208,7 @@ public class MethodsView extends ViewPart {
 		showCandidateSync = new Action() {
 			public void run() {
 				try {
-					ShowTableViewAction.updateView();
+					splitlock.updateView();
 				} catch (PartInitException e) {
 					e.printStackTrace();
 				}
@@ -230,7 +230,7 @@ public class MethodsView extends ViewPart {
 					   String methodname=obj.toString();
 				     String clsName=cls.getText();
 				     IFile file = WorkbenchHelper.getselectedFile(clsName);
-					 jdtRewriter=new JDTRewriter(file);
+					 jdtRewriter=new JDTRewriter_auto(file);
 					 jdtRewriter.addAnnotation(methodname);
 					} 
 			}

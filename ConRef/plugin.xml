@@ -68,16 +68,66 @@
                id="highlighter.RemoveHighlight"/> 
                -->
          <action
-               class="com.conref.refactoring.splitlock.actions.ShowTableViewAction"
+               class="com.conref.refactoring.splitlock.actions.splitlock"
                icon="icons/lock.png"
                id="splitlock.actions.showViewAction"
-               label="showView"
+               label="splitlock automatically"
                menubarPath="sampleMenu/sampleGroup"
                style="push"
                toolbarPath="sampleGroup">
          </action>
      
       </editorContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            id="ConRef.viewerContribution1"
+            targetID="#CompilationUnitEditorContext">
+         <menu
+               id="conRefMenu"
+               label="Concurrent Refactoring"
+               path="additions">
+            <separator
+                  name="basicGroup">
+            </separator>
+         </menu>
+         <action
+               class="com.conref.refactoring.splitCriticalSection.splitCSDelegate"
+               icon="icons/lock.png"
+               id="ConRef.splitCS"
+               label="splitCriticalSection"
+               menubarPath="conRefMenu/basicGroup">
+         </action>
+         <action
+               class="com.conref.refactoring.splitlock.actions.splitlock"
+               icon="icons/lock.png"
+               id="ConRef.splitlock_auto"
+               label="splitlock_auto"
+               menubarPath="conRefMenu/basicGroup">
+         </action>
+         <action
+               class="com.conref.refactoring.splitlock.actions.splitlock"
+               icon="icons/lock.png"
+               id="ConRef.splitlock_manual"
+               label="splitlock_manual"
+               menubarPath="conRefMenu/basicGroup">
+         </action>
+         <action
+               class="conref.Action2"
+               icon="icons/shrink - 副本.png"
+               id="ConRef.shrinkCS"
+               label="shrinkCriticalSection"
+               menubarPath="conRefMenu/basicGroup">
+         </action>
+         <action
+               class="conref.Action3"
+               icon="icons/private.png"
+               id="ConRef.mergeLock"
+               label="mergeLock"
+               menubarPath="conRefMenu/basicGroup">
+         </action>
+      </viewerContribution>
    </extension>
 
 </plugin>

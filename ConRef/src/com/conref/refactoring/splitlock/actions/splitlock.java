@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -15,42 +13,103 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ltk.core.refactoring.Change;
+import org.eclipse.ltk.ui.refactoring.RefactoringWizardOpenOperation;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.ITextEditor;
 
+import com.conref.Global;
 import com.conref.refactoring.splitlock.core.ClassFeildsAnalyzer;
+import com.conref.refactoring.splitlock.core.JDTRewriter_auto;
+import com.conref.refactoring.splitlock.core.JDTRewriter_manual;
 import com.conref.refactoring.splitlock.core.JavaCriticalSection;
 import com.conref.refactoring.splitlock.core.JavaCriticalSectionFinder;
+import com.conref.refactoring.splitlock.core.manualSplitSettingsDlg;
 import com.conref.refactoring.splitlock.core.JavaCriticalSection.NoMatchingSootMethodException;
+import com.conref.refactoring.splitlock.refactor.splitRefactoring;
+import com.conref.refactoring.splitlock.refactoringWizard.splitRefactoringWizard;
 import com.conref.refactoring.splitlock.views.MethodsView;
+import com.conref.util.JDTUtils;
 import com.conref.util.PathUtils;
 import com.conref.util.WorkbenchHelper;
 
 import soot.Scene;
 
 
-public class ShowTableViewAction implements IEditorActionDelegate,
+public class splitlock implements IEditorActionDelegate,
 		IWorkbenchWindowActionDelegate {
 	private ICompilationUnit select;
 	private static IFile _file;
 	private ITextEditor _editor;
 	private static String id = "test.views.SampleView";
 	private static ClassFeildsAnalyzer analyzer;
+	private Set<String> lockList=new HashSet<String>();
 
 	@Override
 	public void run(IAction action) {
+		if (_editor == null) {
+			return;
+		}
+
+		String id = action.getId();
+		if (id.equals("ConRef.splitlock_auto")) {
+			split_auto();
+		}
+		if (id.equals("ConRef.splitlock_manual")) {
+			try {
+				split_manual();
+			} catch (JavaModelException e) {
+				e.printStackTrace();
+			} catch (BadLocationException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void split_manual() throws JavaModelException,
+			BadLocationException, InterruptedException {
+		Shell shell = WorkbenchHelper.getActiveShell();
+		manualSplitSettingsDlg settings = new manualSplitSettingsDlg(null,
+				_file, lockList);
+		if (settings.open() == IDialogConstants.OK_ID) {
+			ITextSelection selection = (ITextSelection) _editor
+					.getSelectionProvider().getSelection();
+			IMethod m = JDTUtils.getEnclosingMethod(_editor,
+					selection.getStartLine());
+			JDTRewriter_manual jdtRewriter = new JDTRewriter_manual(_file,lockList);
+			String methodname=m.getElementName();
+			Change change = jdtRewriter.collectASTChange(methodname);
+			WorkbenchHelper.showEditor(_file);
+			splitRefactoring refactor = new splitRefactoring(change);
+			splitRefactoringWizard wizard = new splitRefactoringWizard(refactor);
+			RefactoringWizardOpenOperation op = new RefactoringWizardOpenOperation(
+					wizard);
+			op.run(shell, "Split Refactoring");
+			jdtRewriter.addAnnotation(methodname);
+		}
+	}
+	private void split_auto() {
 		// 
 		try {
 			IWorkbenchPage page = WorkbenchHelper.openViewPage(id);
@@ -119,24 +178,7 @@ public class ShowTableViewAction implements IEditorActionDelegate,
 			e.printStackTrace();
 
 		}
-			
-		
-//		//
-//		try {
-//			IWorkbenchPage page = WorkbenchHelper.openViewPage(id);
-//			MethodsView viewpart = (MethodsView) page.findView(id);
-//			Map<String, Map<String, Integer>> classMap = getClasses(_file);
-//			viewpart.getViewer().setInput(classMap);
-//			page.showView(id);
-//			runAnalysis();
-//		} catch (PartInitException e) {
-//
-//			e.printStackTrace();
-//
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//
+
 	}
 
 	private void runAnalysis() throws PartInitException, InterruptedException {

@@ -12,8 +12,8 @@ import java.util.*;
  */
 public class Global {
 	private static Set<Class<?>> _classesWithGlobal = new HashSet<Class<?>>();
-
 	private static Global _instance;
+	public static String lockname;
 	private Global(){
 	
 		out = System.out;
