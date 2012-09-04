@@ -70,7 +70,7 @@
          <action
                class="com.conref.refactoring.splitlock.actions.splitlock"
                icon="icons/lock.png"
-               id="splitlock.actions.showViewAction"
+               id="ConRef.splitlock_auto"
                label="splitlock automatically"
                menubarPath="sampleMenu/sampleGroup"
                style="push"
