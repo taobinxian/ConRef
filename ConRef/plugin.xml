@@ -127,6 +127,13 @@
                label="mergeLock"
                menubarPath="conRefMenu/basicGroup">
          </action>
+         <action
+               class="com.conref.refactoring.makeFieldAtomic.actions.makeFieldAtomic"
+               icon="icons/makeFieldAtomic.png"
+               id="ConRef.makeFieldAtomic"
+               label="makeFieldAtomic"
+               menubarPath="conRefMenu/basicGroup">
+         </action>
       </viewerContribution>
    </extension>
 

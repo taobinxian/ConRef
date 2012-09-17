@@ -1,31 +1,24 @@
-package com.conref.refactoring.splitlock.core;
+package com.conref.refactoring.splitlock.refactoringWizard;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jdt.internal.ui.JavaPluginImages;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.text.Document;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.ltk.ui.refactoring.UserInputWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -33,9 +26,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-import com.conref.Global;
 
-public class manualSplitSettingsDlg extends Dialog{
+public class splitlockInputPage extends UserInputWizardPage{
 	class TableLabelProvider extends LabelProvider  implements ITableLabelProvider {
 		public String getColumnText(Object element, int columnIndex) {
 				if (columnIndex == 0) {
@@ -73,18 +65,24 @@ private int id=1;
 IFile _file;
 private TableViewer tableViewer_origin;
 private TableViewer tableViewer_new;
-	public manualSplitSettingsDlg(Shell parentShell, IFile file,Set lockList) {
-		super(parentShell);
-		_file=file;
-		this.lockList=lockList;
-	}
-	@Override
-	protected Control createDialogArea(Composite parent) {
-		
-		Composite container = (Composite) super.createDialogArea(parent);
-		container.setLayout(null);
+	private static String PAGE_NAME="splitlockInputPage";
+	private Document fSignaturePreviewDocument;
 
-		final Group optionsGroup = new Group(container, SWT.V_SCROLL);
+	public splitlockInputPage() {
+		super(PAGE_NAME);
+//		setImageDescriptor(JavaPluginImages.DESC_WIZBAN_REFACTOR_CU);
+//		setDescription(DESCRIPTION);
+//		fFirstTime= true;
+		fSignaturePreviewDocument= new Document();	}
+
+	@Override
+	public void createControl(Composite parent) {
+
+		
+//		Composite container = (Composite) super.createDialogArea(parent);
+//		container.setLayout(null);
+
+		final Group optionsGroup = new Group(parent, SWT.V_SCROLL);
 		optionsGroup.setText("Options");
 		optionsGroup.setBounds(0, 0, 435, 230);
 		final Label label=new Label(optionsGroup, SWT.NONE);
@@ -147,42 +145,6 @@ private TableViewer tableViewer_new;
 		 REMOVE.setBounds(205,160, 60, 25);
 		 REMOVE.setText("<<<");
 		 
-		return container;
-	}
-
-	/**
-	 * Create contents of the button bar
-	 * @param parent
-	 */
-//	@Override
-//	protected void createButtonsForButtonBar(Composite parent) {
-//		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-//				true);
-//		createButton(parent, IDialogConstants.CANCEL_ID,
-//				IDialogConstants.CANCEL_LABEL, false);
-//	}
-//	@Override
-//	protected Point getInitialSize() {
-//		return new Point(442, 302);
-//	}
-	protected void configureShell(Shell newShell) {
-		super.configureShell(newShell);
-		newShell.setText("Setting Options for split lock manually");
-	}
-	
-	protected void buttonPressed(int buttonId) {
-		if (buttonId == IDialogConstants.OK_ID) {
-			 TableItem[] selection = tableViewer_origin.getTable().getSelection();
-			 if(selection==null){
-				 MessageDialog.openInformation(
-							null,
-							"selection",
-							"please select a lock");
-			 }
-			String lockname=selection[0].getData().toString();
-			Global.lockname=lockname;
-		}
-		super.buttonPressed(buttonId);
 	}
 
 }

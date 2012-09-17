@@ -1,4 +1,4 @@
-package com.conref.refactoring.splitlock.refactoringWizard;
+package com.conref.refactoring.makeFieldAtomic.refactoringWizard;
 
 import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.refactoring.RefactoringMessages;
@@ -8,14 +8,14 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizard
 ;
 
-import com.conref.refactoring.splitlock.refactor.splitRefactoring;
+import com.conref.refactoring.makeFieldAtomic.refactor.makeAtomicRefactoring;
 
-public class splitRefactoringWizard extends RefactoringWizard {
+public class makeAtomicRefactoringWizard extends RefactoringWizard {
 
-	public splitRefactoringWizard(splitRefactoring ref) {
+	public makeAtomicRefactoringWizard(makeAtomicRefactoring ref) {
 //		super(refactoring, WIZARD_BASED_USER_INTERFACE);
-		super(ref, DIALOG_BASED_USER_INTERFACE | PREVIEW_EXPAND_FIRST_NODE);
-		setDefaultPageTitle("split lock automatically");
+		super(ref, DIALOG_BASED_USER_INTERFACE | PREVIEW_EXPAND_FIRST_NODE );
+		setDefaultPageTitle("make the field atomic");
 //		setDialogSettings(new DialogSettings("Workbench")); //$NON-NLS-1$
 
 	}

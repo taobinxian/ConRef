@@ -92,23 +92,23 @@ public class splitlock implements IEditorActionDelegate,
 		Shell shell = WorkbenchHelper.getActiveShell();
 		manualSplitSettingsDlg settings = new manualSplitSettingsDlg(null,
 				_file, lockList);
-		if (settings.open() == IDialogConstants.OK_ID) {
-			ITextSelection selection = (ITextSelection) _editor
-					.getSelectionProvider().getSelection();
-			IMethod m = JDTUtils.getEnclosingMethod(_editor,
-					selection.getStartLine());
-			JDTRewriter_manual jdtRewriter = new JDTRewriter_manual(_file,lockList);
-			String methodname=m.getElementName();
-			Change change = jdtRewriter.collectASTChange(methodname);
-			WorkbenchHelper.showEditor(_file);
-			splitRefactoring refactor = new splitRefactoring(change);
+		//if (settings.open() == IDialogConstants.OK_ID) {
+//			ITextSelection selection = (ITextSelection) _editor
+//					.getSelectionProvider().getSelection();
+//			IMethod m = JDTUtils.getEnclosingMethod(_editor,
+//					selection.getStartLine());
+//			JDTRewriter_manual jdtRewriter = new JDTRewriter_manual(_file,lockList);
+//			String methodname=m.getElementName();
+//			Change change = jdtRewriter.collectASTChange(methodname);
+//			WorkbenchHelper.showEditor(_file);
+			splitRefactoring refactor = new splitRefactoring(null);
 			splitRefactoringWizard wizard = new splitRefactoringWizard(refactor);
 			RefactoringWizardOpenOperation op = new RefactoringWizardOpenOperation(
 					wizard);
 			op.run(shell, "Split Refactoring");
-			jdtRewriter.addAnnotation(methodname);
+	//		jdtRewriter.addAnnotation(methodname);
 		}
-	}
+//	}
 	private void split_auto() {
 		// 
 		try {
