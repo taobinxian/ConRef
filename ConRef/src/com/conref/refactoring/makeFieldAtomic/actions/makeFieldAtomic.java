@@ -1,6 +1,8 @@
 package com.conref.refactoring.makeFieldAtomic.actions;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -125,7 +127,7 @@ public class makeFieldAtomic implements IEditorActionDelegate,
 	ASTRewrite rewriter; 
 	Document document ;
 	private boolean condition=false;
-
+	Set<ASTNode> NotRefactoringNode=new HashSet<ASTNode>();
 	@Override
 	public void run(IAction action) {
 		if (_editor == null) {
@@ -141,7 +143,8 @@ public class makeFieldAtomic implements IEditorActionDelegate,
 				MessageDialog.openInformation(
 						shell,
 						"makeFieldAtomic",
-						"the field is not only used for increasement or decreasement ");
+						"Refactoring can not be done!!!\n\n"+NotRefactoringNode.toString());
+				NotRefactoringNode.clear();
 				return ;
 			}
 			try {
@@ -168,6 +171,15 @@ public class makeFieldAtomic implements IEditorActionDelegate,
 					public boolean visit(SimpleName simplename){
 						if(simplename.toString().equals(selectedFieldName)){
 							condition=simplename.getParent()instanceof PostfixExpression||selectedNode.getParent() instanceof PrefixExpression;
+							if (!condition) {
+								ASTNode node = simplename;
+								while (!(node instanceof Block)) {
+									node = node.getParent();
+								}
+								NotRefactoringNode.add(node);
+							}
+							
+							
 						}
 						
 						return true;
@@ -296,6 +308,9 @@ public class makeFieldAtomic implements IEditorActionDelegate,
 		 int selectedNodeType = selectedNode.getNodeType();
 			if (selectedNodeType == ASTNode.SIMPLE_NAME) {
 				selectedFieldName=((SimpleName)selectedNode).getIdentifier();
+			}
+			if(selectedNodeType==ASTNode.VARIABLE_DECLARATION_FRAGMENT){
+				selectedFieldName=((VariableDeclarationFragment)selectedNode).getName().getIdentifier();
 			}
 		} else
 			// _file =
