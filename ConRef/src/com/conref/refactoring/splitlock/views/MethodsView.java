@@ -1,7 +1,5 @@
 package com.conref.refactoring.splitlock.views;
 
-import java.util.Map;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.action.Action;
@@ -10,7 +8,6 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -27,7 +24,6 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -74,7 +70,7 @@ public class MethodsView extends ViewPart {
 
 	private JDTRewriter_auto jdtRewriter;
 
-	private String id= "test.views.SampleView";
+	
 	
 
 //	private String methodname;
@@ -182,7 +178,6 @@ public class MethodsView extends ViewPart {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					} catch (PartInitException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					
@@ -244,11 +239,6 @@ public class MethodsView extends ViewPart {
 				doubleClickAction.run();
 			}
 		});
-	}
-
-	private void showMessage(String message) {
-		MessageDialog.openInformation(viewer.getControl().getShell(),
-				"Sample View", message);
 	}
 
 	/**

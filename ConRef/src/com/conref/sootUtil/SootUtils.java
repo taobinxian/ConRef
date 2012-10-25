@@ -23,7 +23,6 @@ import soot.jimple.toolkits.callgraph.CallGraphBuilder;
 import soot.jimple.toolkits.callgraph.Edge;
 import soot.jimple.toolkits.callgraph.ReachableMethods;
 import soot.jimple.toolkits.pointer.DumbPointerAnalysis;
-import soot.options.Options;
 import soot.shimple.*;
 import soot.*;
 import soot.util.*;
@@ -36,6 +35,7 @@ import soot.toolkits.scalar.Pair;
 /**
  * A collection of basic soot utils
  */
+@SuppressWarnings({ "rawtypes", "unchecked", "deprecation" })
 public class SootUtils {
     /**Get the SootClass instance set of cls's father types*/
     public static Set<SootClass> getAncestorTypes(SootClass cls){
@@ -331,7 +331,6 @@ public class SootUtils {
     }
     
     
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static ReachableMethods getReachableMethods(Collection entries){
 		Scene scene = Scene.v();
 		if(entries.equals(scene.getEntryPoints())){
@@ -538,7 +537,6 @@ public class SootUtils {
 	}
 	
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Set toCompactSet(){
 		return null;}
 }

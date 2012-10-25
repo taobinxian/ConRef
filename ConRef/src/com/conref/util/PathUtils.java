@@ -134,34 +134,34 @@ public class PathUtils {
 		classpath =PathUtils.getJreClasspath(WorkbenchHelper.getJDKPath())+";"+classpath;
 	
 		//hsqldb
-		classpath=path.substring(0, prjLocation+Prjpath.length())+"/servlet.jar;"+path.substring(0, prjLocation+Prjpath.length())+"/hsqldb.jar;"+classpath;
+//		classpath=path.substring(0, prjLocation+Prjpath.length())+"/servlet.jar;"+path.substring(0, prjLocation+Prjpath.length())+"/hsqldb.jar;"+classpath;
 
 		//JGroups
-		classpath=path.substring(0, prjLocation+Prjpath.length())+"/ant.jar;"
-				+path.substring(0, prjLocation+Prjpath.length())+"/ant-junit.jar;"
-				+path.substring(0, prjLocation+Prjpath.length())+"/bcprov-jdk14-117.jar;"
-				+path.substring(0, prjLocation+Prjpath.length())+"/junit.jar;"
-				+path.substring(0, prjLocation+Prjpath.length())+"/ant-launcher.jar;"
-				+path.substring(0, prjLocation+Prjpath.length())+"/concurrent.jar;"
-				+path.substring(0, prjLocation+Prjpath.length())+"/jms.jar;"
-				+path.substring(0, prjLocation+Prjpath.length())+"/jmxri.jar;"
-				+path.substring(0, prjLocation+Prjpath.length())+"/xalan.jar;"
-				+path.substring(0, prjLocation+Prjpath.length())+"/serializer.jar;"
-				+path.substring(0, prjLocation+Prjpath.length())+"/log4j-1.2.6.jar;"
-				+path.substring(0, prjLocation+Prjpath.length())+"/commons-logging.jar;"
-				+path.substring(0, prjLocation+Prjpath.length())+"/bsh-1.2b3.jar;"
-				+classpath;
+//		classpath=path.substring(0, prjLocation+Prjpath.length())+"/ant.jar;"
+//				+path.substring(0, prjLocation+Prjpath.length())+"/ant-junit.jar;"
+//				+path.substring(0, prjLocation+Prjpath.length())+"/bcprov-jdk14-117.jar;"
+//				+path.substring(0, prjLocation+Prjpath.length())+"/junit.jar;"
+//				+path.substring(0, prjLocation+Prjpath.length())+"/ant-launcher.jar;"
+//				+path.substring(0, prjLocation+Prjpath.length())+"/concurrent.jar;"
+//				+path.substring(0, prjLocation+Prjpath.length())+"/jms.jar;"
+//				+path.substring(0, prjLocation+Prjpath.length())+"/jmxri.jar;"
+//				+path.substring(0, prjLocation+Prjpath.length())+"/xalan.jar;"
+//				+path.substring(0, prjLocation+Prjpath.length())+"/serializer.jar;"
+//				+path.substring(0, prjLocation+Prjpath.length())+"/log4j-1.2.6.jar;"
+//				+path.substring(0, prjLocation+Prjpath.length())+"/commons-logging.jar;"
+//				+path.substring(0, prjLocation+Prjpath.length())+"/bsh-1.2b3.jar;"
+//				+classpath;
 	//antlr
-		classpath=path.substring(0, prjLocation+Prjpath.length())+"/antlr-2.7.7.jar;"
-		+path.substring(0, prjLocation+Prjpath.length())+"/antlr-3.0.jar;"
-		+path.substring(0, prjLocation+Prjpath.length())+"/antlr-runtime-3.0.jar;"
-		+path.substring(0, prjLocation+Prjpath.length())+"/stringtemplate-3.0;"
-		+classpath;
+//		classpath=path.substring(0, prjLocation+Prjpath.length())+"/antlr-2.7.7.jar;"
+//		+path.substring(0, prjLocation+Prjpath.length())+"/antlr-3.0.jar;"
+//		+path.substring(0, prjLocation+Prjpath.length())+"/antlr-runtime-3.0.jar;"
+//		+path.substring(0, prjLocation+Prjpath.length())+"/stringtemplate-3.0;"
+//		+classpath;
 	//fop
-		classpath=path.substring(0, prjLocation+Prjpath.length())+"/fop.jar;"
-		+path.substring(0, prjLocation+Prjpath.length())+"/fop-deps.jar;"
-		+path.substring(0, prjLocation+Prjpath.length())+"/fop-smil.jar;"
-		+classpath;
+//		classpath=path.substring(0, prjLocation+Prjpath.length())+"/fop.jar;"
+//		+path.substring(0, prjLocation+Prjpath.length())+"/fop-deps.jar;"
+//		+path.substring(0, prjLocation+Prjpath.length())+"/fop-smil.jar;"
+//		+classpath;
 	return classpath;
 	}
 	public static String getJreClasspath(String jdkRoot){

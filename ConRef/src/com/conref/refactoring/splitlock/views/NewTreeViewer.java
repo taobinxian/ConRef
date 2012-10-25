@@ -1,10 +1,7 @@
 package com.conref.refactoring.splitlock.views;
 
-import java.io.File;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -15,19 +12,17 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
-
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class NewTreeViewer extends TreeViewer {
 	static NewTreeViewer _instance;
-	private Shell _shell;
 	private Tree _tree;
 	private Map<String,Map<String,Integer>> root;
 	private NewTreeViewer(Composite parent) {
 		super(parent, SWT.FULL_SELECTION | SWT.LINE_DASH | SWT.BORDER);
 
-		this._shell = parent.getShell();
+		parent.getShell();
 		_tree = getTree();
 		_tree.setHeaderVisible(true);
 		_tree.setLinesVisible(true);
@@ -77,7 +72,6 @@ public class NewTreeViewer extends TreeViewer {
 			return getChildren(element) != null;
 		}
 
-		@SuppressWarnings("rawtypes")
 		public Object[] getElements(Object inputElement) {
 
 			if (inputElement instanceof Map) {
@@ -105,7 +99,6 @@ public class NewTreeViewer extends TreeViewer {
 				return element.toString();
 			}
 			if (columnIndex == 1) {
-				int line=0;
 				for(Object method:root.values()){
 					if(((Map)method).containsKey(element)){
 						return ((Map<String,Integer>)method).get(element).toString();

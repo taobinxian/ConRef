@@ -44,6 +44,7 @@
             name="Split Candidates">
       </view>
    </extension>
+   <!--
    <extension
          point="org.eclipse.ui.editorActions">
          <editorContribution
@@ -57,7 +58,6 @@
                   name="sampleGroup">
             </separator>
          </menu>
-         <!--
          <action
                toolbarPath="sampleGroup"
                label="Reset"
@@ -66,11 +66,11 @@
                class="splitlock.highlighter.RemoveHighlightAction"
                style="push"
                id="highlighter.RemoveHighlight"/> 
-               -->
+               
          <action
                class="com.conref.refactoring.splitlock.actions.splitlock"
                icon="icons/lock.png"
-               id="splitlock.actions.showViewAction"
+               id="ConRef.splitlock_auto"
                label="splitlock automatically"
                menubarPath="sampleMenu/sampleGroup"
                style="push"
@@ -79,6 +79,7 @@
      
       </editorContribution>
    </extension>
+   -->
    <extension
          point="org.eclipse.ui.popupMenus">
       <viewerContribution
@@ -93,40 +94,77 @@
             </separator>
          </menu>
          <action
-               class="com.conref.refactoring.splitCriticalSection.splitCSDelegate"
-               icon="icons/lock.png"
-               id="ConRef.splitCS"
-               label="splitCriticalSection"
+               class="com.conref.refactoring.makeClassThreadSafe.actions.makeClassThreadSafe"
+               id="ConRef.makeClassThreadSafe"
+               label="Make Class Thread Safe"
                menubarPath="conRefMenu/basicGroup">
          </action>
          <action
-               class="com.conref.refactoring.splitlock.actions.splitlock"
-               icon="icons/lock.png"
-               id="ConRef.splitlock_auto"
-               label="splitlock_auto"
+               class="com.conref.refactoring.makeFieldThreadLocal.actions.makeFieldThreadLocal"
+               id="ConRef.makeFieldTjreadLocal"
+               label="Make Field ThreadLocal"
                menubarPath="conRefMenu/basicGroup">
          </action>
          <action
+               class="com.conref.refactoring.convertReentrantLockToReadWriteLock.actions.convertReentrantLockToRWLock"
+               id="ConRef.convertReentrantLockToRWLock"
+               label="Convert ReentrantLock To ReadWriteLock"
+               menubarPath="conRefMenu/basicGroup">
+         </action>
+         <action
+               class="com.conref.refactoring.convertRWLockToReentrantLock.actions.convertRWLockToReentrantLock"
+               id="ConRef.convertRWLockToReentrantLock"
+               label="Convert ReadWriteLock To ReentrantLock"
+               menubarPath="conRefMenu/basicGroup">
+         </action>
+         <action
+               class="com.conref.refactoring.mergeLocks.action.mergeLocks"
+               id="ConRef.mergeLocks"
+               label="Merge Locks"
+               menubarPath="conRefMenu/basicGroup">
+         </action>
+         <action
+               class="com.conref.refactoring.lockCallSites.action.lockCallSites"
+               id="ConRef.lockCallSites"
+               label="Lock CallSites"
+               menubarPath="conRefMenu/basicGroup">
+         </action>       
+         <action
+               class="com.conref.refactoring.makeFieldAtomic.actions.makeFieldAtomic"
+               id="ConRef.makeFieldAtomic"
+               label="Make Field Atomic"
+               menubarPath="conRefMenu/basicGroup">
+         </action>
+         <action
+               class="com.conref.refactoring.convertSyncFieldToLock.actions.convertSyncFieldToLock"
+               id="ConRef.convertSyncFieldToLock"
+               label="Convert SyncField To Lock"
+               menubarPath="conRefMenu/basicGroup">
+         </action>   <action
                class="com.conref.refactoring.splitlock.actions.splitlock"
-               icon="icons/lock.png"
                id="ConRef.splitlock_manual"
-               label="splitlock_manual"
+               label="Split Lock Manual"
                menubarPath="conRefMenu/basicGroup">
          </action>
-         <action
-               class="conref.Action2"
+                     <action
+                           class="com.conref.refactoring.splitlock.actions.splitlock"
+                           id="ConRef.splitlock_auto"
+                           label="Split Lock automatically"
+                           menubarPath="conRefMenu/basicGroup">
+                     </action>
+ <!--        <action
                icon="icons/shrink - 副本.png"
                id="ConRef.shrinkCS"
                label="shrinkCriticalSection"
                menubarPath="conRefMenu/basicGroup">
          </action>
          <action
-               class="conref.Action3"
                icon="icons/private.png"
                id="ConRef.mergeLock"
                label="mergeLock"
                menubarPath="conRefMenu/basicGroup">
          </action>
+  -->
       </viewerContribution>
    </extension>
 

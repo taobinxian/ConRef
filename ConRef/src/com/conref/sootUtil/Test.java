@@ -7,23 +7,30 @@
  */
 package com.conref.sootUtil;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.PrintStream;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import soot.Body;
+import soot.EntryPoints;
+import soot.PhaseOptions;
+import soot.Scene;
+import soot.SootClass;
+import soot.SootMethod;
+import soot.Unit;
+import soot.jimple.toolkits.callgraph.CallGraphBuilder;
+import soot.jimple.toolkits.pointer.DumbPointerAnalysis;
+import soot.options.Options;
 
 import com.conref.util.CollectionUtils;
 import com.conref.util.Configurator;
 import com.conref.util.PathUtils;
 import com.conref.util.WorkbenchHelper;
-
-
-import soot.*;
-import soot.jimple.toolkits.callgraph.CallGraph;
-import soot.jimple.toolkits.callgraph.CallGraphBuilder;
-import soot.jimple.toolkits.pointer.DumbPointerAnalysis;
-import soot.options.Options;
-import soot.toolkits.graph.BriefUnitGraph;
-import soot.toolkits.graph.DirectedGraph;
-import soot.toolkits.graph.UnitGraph;
 
 
 /**
@@ -40,9 +47,7 @@ public class Test {
 	
 	public static Properties loadConfig(String configFile){		
 		Configurator conf = new Configurator();
-		File file = new File(configFile);
-
- 			_config = conf.parse(configFile);
+		_config = conf.parse(configFile);
 
 
 		_debug = Boolean.valueOf(_config.getProperty("debug"));
@@ -125,32 +130,22 @@ public class Test {
 	}
 	 
 	public static Collection<SootClass> loadClasses(boolean isWholeProgramAnalysis){
-		Date startTime = new Date();
-		
 		setDefaultSootOptions(_config, isWholeProgramAnalysis, false);
 		
 		//load classes for analysis
 		String entryClass = _config.getProperty("entry_class");	
 		SootUtils.loadClassesForEntry(entryClass);
 	 
-		Date endTime=new Date();	
-		//Test.out.println("Load " + Scene.v().getClasses().size() + " soot classes in "+ Utils.getTimeConsumed(startTime,endTime));
-		
 		SootUtils.numberClassAndFields();
 		return Scene.v().getClasses();
 	}
 	
 	public static Collection<SootClass> loadClassesInShimple(boolean isWholeProgramAnalysis){
-		Date startTime = new Date();
-		
 		setDefaultSootOptions(_config, isWholeProgramAnalysis, true); 
 		//load classes for analysis
 		String entryClass = _config.getProperty("entry_class");	
 		SootUtils.loadClassesForEntry(entryClass);
 	 
-		Date endTime=new Date();	
-		//Test.out.println("Load " + Scene.v().getClasses().size() + " soot classes in "+ Utils.getTimeConsumed(startTime,endTime));
-		
 		SootUtils.numberClassAndFields();
 		return Scene.v().getClasses();
 	}

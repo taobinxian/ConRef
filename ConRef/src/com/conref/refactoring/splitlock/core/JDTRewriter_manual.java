@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -16,7 +15,6 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Block;
-import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
@@ -24,10 +22,8 @@ import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.SimpleName;
-import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.SynchronizedStatement;
 import org.eclipse.jdt.core.dom.ThisExpression;
-import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
@@ -45,19 +41,14 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import com.conref.Global;
-import com.conref.refactoring.splitlock.core.JavaCriticalSection.NoMatchingSootMethodException;
 import com.conref.util.PathUtils;
 import com.conref.util.WorkbenchHelper;
-
-import soot.SootField;
-
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class JDTRewriter_manual {
 	private final class syncStmtVisitor extends ASTVisitor {
-		@SuppressWarnings("unchecked")
 		public boolean visit(SynchronizedStatement synstmt) {
 
 			if (synstmt.getExpression() instanceof ThisExpression) {
@@ -80,10 +71,31 @@ public class JDTRewriter_manual {
 			this.methodname = methodname;
 		}
 
-		@SuppressWarnings({ "unchecked" })
 		public boolean visit(MethodDeclaration method) {
 			if (method.getName().toString().equals(methodname)) {
 				cls = (TypeDeclaration) method.getParent();
+				//add field declaration
+			  boolean selectedLockIsExist=isExist(unit,Global.lockname);
+			  if(!selectedLockIsExist){
+				  SimpleName fieldname = ast.newSimpleName(Global.lockname);
+
+					ClassInstanceCreation classInstanceCreation = ast
+							.newClassInstanceCreation();
+					classInstanceCreation.setType(ast.newSimpleType(ast
+							.newName("Object")));
+					VariableDeclarationFragment fragment = ast
+							.newVariableDeclarationFragment();
+					fragment.setName(fieldname);
+					fragment.setInitializer(classInstanceCreation);
+					FieldDeclaration fd = ast.newFieldDeclaration(fragment);
+					fd.setType(ast.newSimpleType(ast.newSimpleName("Object")));
+					fd.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.FINAL_KEYWORD));
+				
+					ListRewrite lrw = rewriter.getListRewrite(cls,
+							TypeDeclaration.BODY_DECLARATIONS_PROPERTY);
+					lrw.insertFirst(fd, null);		
+			  }
+				//---------------------
 				List<Modifier> modifiers = method.modifiers();
 				List<String> md = new ArrayList<String>();
 				for (Modifier md1 : modifiers) {
@@ -117,21 +129,18 @@ public class JDTRewriter_manual {
 	}
 
 	private IFile _file;
-	private ClassFeildsAnalyzer analyzer;
 	private AST ast;
 	private TypeDeclaration cls;
 	private ASTRewrite rewriter;
-	private boolean flag = false;
-	private Set<String> lockList;
+	private CompilationUnit unit;
 
-	public JDTRewriter_manual(IFile file,Set<String> lockList) {
+	public JDTRewriter_manual(IFile file,Map lockList) {
 		this._file = file;
-		this.lockList=lockList;
 	}
 
-	public Change collectASTChange(String methodname)
+	public Change collectASTChange(String methodnames)
 			throws JavaModelException, BadLocationException {
-		return rewriteAST(methodname);
+		return rewriteAST(methodnames);
 	}
 
 	public void addAnnotation(String methodname) {
@@ -163,38 +172,40 @@ public class JDTRewriter_manual {
 				length);
 	}
 
-	private Change rewriteAST(final String methodname)
+	private Change rewriteAST(String  methodname)
 			throws JavaModelException, MalformedTreeException,
 			BadLocationException {
 		ICompilationUnit cu = (ICompilationUnit) JavaCore
-				.createCompilationUnitFrom(_file);
+		.createCompilationUnitFrom(_file);
 		ASTParser parser = ASTParser.newParser(AST.JLS3);
 		parser.setSource(cu);
-		CompilationUnit unit = (CompilationUnit) parser.createAST(null);
+		unit = (CompilationUnit) parser.createAST(null);
 		rewriter = ASTRewrite.create(unit.getAST());
 		ast = unit.getAST();
+		
 		unit.accept(new syncMethodVisitor(methodname));
 		
-			for (String lockname:lockList) {
-				SimpleName lock = ast.newSimpleName(lockname);
-                if(isExist(unit,lockname)){
-                	continue;
-                }
-				ClassInstanceCreation classInstanceCreation = ast
-						.newClassInstanceCreation();
-				classInstanceCreation.setType(ast.newSimpleType(ast
-						.newName("Object")));
-				VariableDeclarationFragment fragment = ast
-						.newVariableDeclarationFragment();
-				fragment.setName(lock);
-				fragment.setInitializer(classInstanceCreation);
-				FieldDeclaration fd = ast.newFieldDeclaration(fragment);
-				fd.setType(ast.newSimpleType(ast.newSimpleName("Object")));
-				fd.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.FINAL_KEYWORD));
-				ListRewrite lrw = rewriter.getListRewrite(cls,
-						TypeDeclaration.BODY_DECLARATIONS_PROPERTY);
-				lrw.insertFirst(fd, null);
-			}
+//		
+//			for (String lockname:lockList) {
+//				SimpleName lock = ast.newSimpleName(lockname);
+//                if(isExist(unit,lockname)){
+//                	continue;
+//                }
+//				ClassInstanceCreation classInstanceCreation = ast
+//						.newClassInstanceCreation();
+//				classInstanceCreation.setType(ast.newSimpleType(ast
+//						.newName("Object")));
+//				VariableDeclarationFragment fragment = ast
+//						.newVariableDeclarationFragment();
+//				fragment.setName(lock);
+//				fragment.setInitializer(classInstanceCreation);
+//				FieldDeclaration fd = ast.newFieldDeclaration(fragment);
+//				fd.setType(ast.newSimpleType(ast.newSimpleName("Object")));
+//				fd.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.FINAL_KEYWORD));
+//				ListRewrite lrw = rewriter.getListRewrite(cls,
+//						TypeDeclaration.BODY_DECLARATIONS_PROPERTY);
+//				lrw.insertFirst(fd, null);
+//			}
 	
 
 		String source = cu.getSource();
@@ -230,13 +241,6 @@ public class JDTRewriter_manual {
 		}
 		return false;
 	}
-
-	private String getPath() {
-		String path = _file.getLocation().toString();
-		return path;
-	}
-
-	@SuppressWarnings("unchecked")
 
 	public static String getFileName(IFile _file) {
 		String name = _file.getLocation().toString();

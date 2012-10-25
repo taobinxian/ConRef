@@ -51,6 +51,7 @@ import soot.jimple.toolkits.callgraph.VirtualCalls;
 import soot.jimple.toolkits.pointer.DumbPointerAnalysis;
 import soot.tagkit.LineNumberTag;
 import soot.util.NumberedString;
+@SuppressWarnings({"rawtypes","unchecked"})
 
 public class ClassFeildsAnalyzer implements Runnable {
 	@SuppressWarnings("unused")
@@ -62,9 +63,10 @@ public class ClassFeildsAnalyzer implements Runnable {
 	private static Collection<SootMethod> syncsEnclosingMethods = new LinkedList<SootMethod>();
 	private static ClassFeildsAnalyzer _instance;
 	FieldScaner scaner;
-	private static String _srcpath;
-	private static String _classpath;
+	private  String _srcpath;
+	private  String _classpath;
 	private boolean setMainClass = true;
+
 	private UndirectedGraph varConn = new UndirectedGraph();
 	private Map<String, Set<SootField>> protectedFieldsInAllClass = new HashMap<String, Set<SootField>>();
 	private boolean needMod = true;
@@ -93,7 +95,6 @@ public class ClassFeildsAnalyzer implements Runnable {
 		return set;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void analysis(String srcpaths, String classpaths)
 			throws NoMatchingSootMethodException {
 		Date analysisStart = new Date();
@@ -103,7 +104,6 @@ public class ClassFeildsAnalyzer implements Runnable {
 		Collection<JavaCriticalSection> validSyncs = new HashSet();
 		SootExOpreation();
 
-		CallGraph cg = buildCallGraph(validSyncs);
 		assureAllSyncInCallGraph( validSyncs);
 		Date end = new Date();
 		System.out.println("[assureAllSyncInCallgraph]  finished in "
@@ -226,7 +226,6 @@ public class ClassFeildsAnalyzer implements Runnable {
 		return filteredSet;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Set<SootField> collectBlockField(JavaCriticalSection cs) {
 		Set result = new HashSet();
 		int startLine = cs.getStartLine();
@@ -271,7 +270,6 @@ public class ClassFeildsAnalyzer implements Runnable {
 		return result;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void classifyVarConn() {
 		System.out.println("[classify] starting...");
 		Collection<HashSet> groups = varConn.findConnectedComponents();
@@ -366,7 +364,6 @@ public class ClassFeildsAnalyzer implements Runnable {
 	public void assureAllSyncInCallGraph(
 			Collection<JavaCriticalSection> criticalSections) {
 		System.out.println("[assureAllSyncInCallgraph] starting");
-		Date start = new Date();
 		ReachableMethods oldReach = Scene.v().getReachableMethods();
 		// Collection et = EntryPoints.v().all();
 		// ReachableMethods reachableFromMain = new ReachableMethods(cg, et);

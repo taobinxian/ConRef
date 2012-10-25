@@ -180,8 +180,6 @@ public class JavaCriticalSection implements ICriticalSection{
 	public void bindToSoot() throws NoMatchingSootMethodException{
 		bindSootMethod();
 		
-		boolean bFindMap = false;
-		
 		Map<Integer,Collection<Unit>> map = buildLineToUnitMap(_sootMethod);
 		if(map==null){return ;}
 		for(JavaStmtChunk stmt: _body){			
@@ -190,7 +188,6 @@ public class JavaCriticalSection implements ICriticalSection{
 				if(units!=null){
 					stmt.instructions.addAll(units);
 					if(!units.isEmpty()){
-						bFindMap = true;
 					}
 				}
 			}
@@ -242,8 +239,6 @@ public class JavaCriticalSection implements ICriticalSection{
 			methodName = "<init>";
 		}
 
-		String identifier = className + "." + methodName;
-		
 		// find candidate by name
 		List<SootMethod> candidates = filterMethodByName(cls.getMethods(), methodName);
 		if (candidates.size() == 1) {

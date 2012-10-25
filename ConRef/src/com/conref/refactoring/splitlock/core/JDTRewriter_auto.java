@@ -16,7 +16,6 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Block;
-import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
@@ -45,7 +44,6 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import com.conref.refactoring.splitlock.core.JavaCriticalSection.NoMatchingSootMethodException;
@@ -53,10 +51,9 @@ import com.conref.util.PathUtils;
 import com.conref.util.WorkbenchHelper;
 
 import soot.SootField;
-
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class JDTRewriter_auto {
 	private final class syncStmtVisitor extends ASTVisitor {
-		@SuppressWarnings("unchecked")
 		public boolean visit(SynchronizedStatement synstmt) {
 
 			if (synstmt.getExpression() instanceof ThisExpression) {
@@ -94,7 +91,6 @@ public class JDTRewriter_auto {
 			this.methodname = methodname;
 		}
 
-		@SuppressWarnings({ "unchecked" })
 		public boolean visit(MethodDeclaration method) {
 			if (method.getName().toString().equals(methodname)) {
 				cls = (TypeDeclaration) method.getParent();
@@ -143,7 +139,7 @@ public class JDTRewriter_auto {
 		}
 	}
 
-	static IFile _file;
+	private IFile _file;
 	private ClassFeildsAnalyzer analyzer;
 	private Collection<Collection> modules;
 	private AST ast;
@@ -269,12 +265,6 @@ public class JDTRewriter_auto {
 		return change;
 	}
 
-	private String getPath() {
-		String path = _file.getLocation().toString();
-		return path;
-	}
-
-	@SuppressWarnings("unchecked")
 	public void moduleAnalysis(String className) {
 		String srcpath = PathUtils.getSrcPath(_file);
 		String classpath = PathUtils.getClassPath(_file);

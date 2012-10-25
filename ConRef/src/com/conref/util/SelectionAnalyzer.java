@@ -28,6 +28,8 @@ import org.eclipse.jdt.core.dom.Expression;
 /**
  * Maps a selection to a set of AST nodes.
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
+
 public class SelectionAnalyzer extends GenericVisitor {
 
 	private Selection fSelection;

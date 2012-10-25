@@ -7,21 +7,20 @@ package com.conref.util;
 
 import java.io.File;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.texteditor.ITextEditor;
-import org.eclipse.core.resources.*; 
-import org.eclipse.core.runtime.*;
-import org.eclipse.ui.*;
-import org.eclipse.ui.part.*;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.texteditor.ITextEditor;
 public class WorkbenchHelper {
 	private static final String JDT_VIEW_ID = "org.eclipse.jdt.ui.CompilationUnitEditor";
 
