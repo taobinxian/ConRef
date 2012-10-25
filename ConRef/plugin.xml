@@ -94,6 +94,7 @@
             </separator>
          </menu>
          <action
+<<<<<<< HEAD
                class="com.conref.refactoring.makeClassThreadSafe.actions.makeClassThreadSafe"
                id="ConRef.makeClassThreadSafe"
                label="Make Class Thread Safe"
@@ -140,18 +141,28 @@
                id="ConRef.convertSyncFieldToLock"
                label="Convert SyncField To Lock"
                menubarPath="conRefMenu/basicGroup">
+=======
+               class="com.conref.refactoring.convertSyncFieldToLock.actions.convertSyncFieldToLock"
+               icon="icons/private.png"
+               id="ConRef.convertSyncFieldToLock"
+               label="convertSyncFieldToLock"
+               menubarPath="conRefMenu/basicGroup">
+>>>>>>> 43afddf6fa6c20aaa2dd951f761dc9f4af511029
          </action>   <action
                class="com.conref.refactoring.splitlock.actions.splitlock"
                id="ConRef.splitlock_manual"
                label="Split Lock Manual"
                menubarPath="conRefMenu/basicGroup">
          </action>
+<<<<<<< HEAD
                      <action
                            class="com.conref.refactoring.splitlock.actions.splitlock"
                            id="ConRef.splitlock_auto"
                            label="Split Lock automatically"
                            menubarPath="conRefMenu/basicGroup">
                      </action>
+=======
+>>>>>>> 43afddf6fa6c20aaa2dd951f761dc9f4af511029
  <!--        <action
                icon="icons/shrink - 副本.png"
                id="ConRef.shrinkCS"
@@ -164,7 +175,30 @@
                label="mergeLock"
                menubarPath="conRefMenu/basicGroup">
          </action>
+<<<<<<< HEAD
   -->
+=======
+  -->       
+         <action
+               class="com.conref.refactoring.makeFieldAtomic.actions.makeFieldAtomic"
+               icon="icons/makeFieldAtomic.png"
+               id="ConRef.makeFieldAtomic"
+               label="makeFieldAtomic"
+               menubarPath="conRefMenu/basicGroup">
+         </action>
+         <action
+               class="com.conref.refactoring.makeClassThreadSafe.actions.makeClassThreadSafe"
+               id="ConRef.makeClassThreadSafe"
+               label="makeClassThreadSafe"
+               menubarPath="conRefMenu/basicGroup">
+         </action>
+         <action
+               class="com.conref.refactoring.makeFieldThreadLocal.actions.makeFieldThreadLocal"
+               id="ConRef.makeFieldTjreadLocal"
+               label="makeFieldThreadLocal"
+               menubarPath="conRefMenu/basicGroup">
+         </action>
+>>>>>>> 43afddf6fa6c20aaa2dd951f761dc9f4af511029
       </viewerContribution>
    </extension>
 

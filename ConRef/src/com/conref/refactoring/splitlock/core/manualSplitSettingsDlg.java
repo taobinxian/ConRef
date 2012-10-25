@@ -167,6 +167,7 @@ public class manualSplitSettingsDlg extends Dialog {
 
 	Map root;
 	Shell shell;
+<<<<<<< HEAD
 	private Tree tree;
 	private Map lockMap;
 	IFile _file;
@@ -178,6 +179,16 @@ public class manualSplitSettingsDlg extends Dialog {
 
 	public manualSplitSettingsDlg(Shell parentShell, IFile file,
 			JDTRewriter_manual jdtRewriter, Map lockMap) {
+=======
+	private Table table_origin;
+	private Table table_new;
+	private Set<String> lockList;
+private int id=1;
+IFile _file;
+private TableViewer tableViewer_origin;
+private TableViewer tableViewer_new;
+	public manualSplitSettingsDlg(Shell parentShell, IFile file,Set lockList) {
+>>>>>>> 43afddf6fa6c20aaa2dd951f761dc9f4af511029
 		super(parentShell);
 		this._file = file;
 		this.jdtRewriter = jdtRewriter;
@@ -193,6 +204,7 @@ public class manualSplitSettingsDlg extends Dialog {
 		final Group optionsGroup = new Group(container, SWT.V_SCROLL);
 		optionsGroup.setText("Options");
 		optionsGroup.setBounds(0, 0, 435, 230);
+<<<<<<< HEAD
 		final Label label = new Label(optionsGroup, SWT.NONE);
 		label.setBounds(40, 30, 350, 20);
 		label.setText("please select the lock need to split");
@@ -219,6 +231,68 @@ public class manualSplitSettingsDlg extends Dialog {
 				if(event.getChecked())
 				getButton(IDialogConstants.OK_ID).setEnabled(true);		
 			}});
+=======
+		final Label label=new Label(optionsGroup, SWT.NONE);
+		label.setBounds(40, 30, 150, 20);
+		label.setText("add the new lock");
+		 tableViewer_origin = new TableViewer(optionsGroup,  SWT.FULL_SELECTION | SWT.BORDER|SWT.V_SCROLL);
+
+		table_origin = tableViewer_origin.getTable();
+		table_origin.setLinesVisible(true);
+		table_origin.setHeaderVisible(true);
+		table_origin.setBounds(40, 60, 150, 150);
+		tableViewer_new = new TableViewer(optionsGroup, SWT.FULL_SELECTION
+				| SWT.BORDER | SWT.V_SCROLL);
+		table_new = tableViewer_new.getTable();
+		table_new.setLinesVisible(true);
+		table_new.setHeaderVisible(true);
+		table_new.setBounds(270, 60, 150, 150);
+		final TableColumn col1 = new TableColumn(table_origin, SWT.NONE);
+		col1.setWidth(50);
+		col1.setText("Sync");
+		
+		final TableColumn col2 = new TableColumn(table_origin, SWT.NONE);
+		col2.setWidth(100);
+		col2.setText("Lock");	
+		tableViewer_origin.setContentProvider(new ContentProvider());
+		tableViewer_origin.setLabelProvider(new TableLabelProvider());
+		tableViewer_origin.setInput(lockList);
+	
+		 ADD = new Button(optionsGroup, SWT.NONE);
+		 ADD.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(final SelectionEvent e) {
+				InputDialog inputdlg=new InputDialog(null, "LockName", "input the name of the new lock", "splitLock",  new IInputValidator(){
+					public String isValid(String newText){
+						if(lockList.contains(newText)){
+							return "this lock is exsit";
+						}
+						return null;
+					}
+				} );
+				inputdlg.open();
+				String lockName = inputdlg.getValue();
+				id=1;
+				lockList.add(lockName);
+				tableViewer_origin.setInput(lockList);
+			}
+		});
+		 ADD.setBounds(205,80, 60, 25);
+		 ADD.setText(">>>");
+		 
+		 REMOVE = new Button(optionsGroup, SWT.NONE);
+		 REMOVE.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(final SelectionEvent e) {
+				TableItem[] selection = tableViewer_origin.getTable().getSelection();
+				 String deleteLock = selection[0].getData().toString();
+				lockList.remove(deleteLock);
+				id=1;
+				tableViewer_origin.setInput(lockList);
+			}
+		});
+		 REMOVE.setBounds(205,160, 60, 25);
+		 REMOVE.setText("<<<");
+		 
+>>>>>>> 43afddf6fa6c20aaa2dd951f761dc9f4af511029
 		return container;
 	}
 
@@ -244,6 +318,7 @@ public class manualSplitSettingsDlg extends Dialog {
 
 	protected void buttonPressed(int buttonId) {
 		if (buttonId == IDialogConstants.OK_ID) {
+<<<<<<< HEAD
 			replaceLockDlg rlg = new replaceLockDlg(getParentShell());
 			if (rlg.open() == IDialogConstants.OK_ID) {
 
@@ -254,6 +329,17 @@ public class manualSplitSettingsDlg extends Dialog {
 				creatchange();
 
 			}
+=======
+			 TableItem[] selection = tableViewer_origin.getTable().getSelection();
+			 if(selection==null){
+				 MessageDialog.openInformation(
+							null,
+							"selection",
+							"please select a lock");
+			 }
+			String lockname=selection[0].getData().toString();
+			Global.lockname=lockname;
+>>>>>>> 43afddf6fa6c20aaa2dd951f761dc9f4af511029
 		}
 		super.buttonPressed(buttonId);
 	}
